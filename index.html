@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>ATM人 (ATM Operator)</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- 外部監視器 -->
+  <section id="monitor">
+    <div id="hud">
+      <span>⏱ <b id="timer">3:00</b></span>
+      <span>✅ <b id="hudDone">0</b></span>
+      <span>💸 <b id="hudLoss">0</b></span>
+      <span>😡 <b id="hudComp">0</b></span>
+    </div>
+    <div class="rec">● REC CAM 04</div>
+    <div id="queue"></div>
+    <div id="customer" class="sprite hidden"></div>
+    <div id="bubble" class="hidden"></div>
+    <div id="mirror">
+      <div class="mirror-title">ATM 螢幕</div>
+      <div id="mirrorLabel">待機中</div>
+      <div id="mirrorValue">----</div>
+    </div>
+  </section>
+
+  <!-- 玩家工作台 -->
+  <section id="work">
+    <div id="tabs">
+      <button class="tab active" data-tab="room">🔧 內部機房</button>
+      <button class="tab" data-tab="term">🖥 終端機</button>
+    </div>
+
+    <div id="room" class="panel active">
+      <div id="cardZone">
+        <div id="cardSlot">
+          <div id="card" class="hidden"></div>
+          <div id="swipeHint" class="hidden">⬆ 上滑卡片推回</div>
+          <div id="noCard">（插卡槽空）</div>
+        </div>
+        <div id="judge">
+          <button id="btnV" class="big green">V<small>密碼正確</small></button>
+          <button id="btnX" class="big red">X<small>密碼錯誤</small></button>
+        </div>
+      </div>
+      <div id="cashZone">
+        <div id="stacks">
+          <button class="bill b1000" data-v="1000">1000</button>
+          <button class="bill b100" data-v="100">100</button>
+        </div>
+        <div id="trayWrap">
+          <div id="tray"><div id="trayBills"></div><div id="trayTotal">$0</div></div>
+          <div class="row">
+            <button id="btnReset" class="mid gray">清空 Reset</button>
+            <button id="btnDispense" class="mid gold">確認出鈔</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="term" class="panel">
+      <div id="crt"><pre id="crtText">BANK TERMINAL v1.0
+請輸入卡號後按【查詢卡號】</pre><div id="crtInput">&gt; <span id="inputBuf"></span><span class="cursor">█</span></div></div>
+      <div id="termKeys">
+        <div id="numpad"></div>
+        <div id="funcKeys">
+          <button id="btnQuery" class="fk">查詢卡號</button>
+          <button id="btnLock" class="fk danger">鎖卡</button>
+          <button id="btnAuth" class="fk">提款授權</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="hidden"></div>
+
+  <!-- 開始畫面 -->
+  <div id="startScreen" class="overlay">
+    <div class="box">
+      <h1>🏧 ATM人</h1>
+      <p class="sub">ATM Operator</p>
+      <ol class="howto">
+        <li>【機房】看卡片：反面就<b>上滑推回</b>，正面記下卡號</li>
+        <li>【終端機】輸入卡號 → 查詢，取得密碼與餘額</li>
+        <li>看監視器的密碼：對按 <b>V</b>、錯按 <b>X</b>；錯 3 次要<b>鎖卡</b></li>
+        <li>看提款金額：餘額不足就推回卡片；足夠則<b>提款授權</b>並點鈔出鈔</li>
+      </ol>
+      <p class="warn">⚠ 系統沒有防呆，所有錯誤照單全收！</p>
+      <button id="btnStart" class="big gold">開始上班（3 分鐘）</button>
+    </div>
+  </div>
+
+  <!-- 結算 -->
+  <div id="endScreen" class="overlay hidden">
+    <div class="box">
+      <h2>📋 今日結算報告</h2>
+      <div id="rank"></div>
+      <div id="rankTitle"></div>
+      <table id="stats"></table>
+      <div id="newspaper" class="hidden"></div>
+      <button id="btnRestart" class="big gold">再上一次班</button>
+    </div>
+  </div>
+</div>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
