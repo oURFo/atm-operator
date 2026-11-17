@@ -2,7 +2,13 @@
 const $ = (id) => document.getElementById(id);
 const GAME_TIME = 180, SPAWN_EVERY = 8, MAX_QUEUE = 3;
 const SURNAMES = '陳林黃張李王吳劉蔡楊許鄭謝郭洪曾邱廖賴周'.split('');
-const GIVEN = ['志明', '春嬌', '雅婷', '家豪', '淑芬', '俊傑', '美玲', '建宏', '怡君', '宗翰', '秀英', '文雄', '佳穎', '冠宇', '阿嬤', '大雄'];
+// 名字依圖像：1 中年上班族男、2 年輕女生、3 阿嬤、4 刺青年輕男
+const GIVEN = {
+  1: ['志明', '建宏', '文雄', '國華', '俊雄', '振興', '明德', '清標'],
+  2: ['雅婷', '怡君', '佳穎', '欣妤', '詩涵', '宜蓁', '筱涵', '品妍'],
+  3: ['秀英', '阿桃', '玉蘭', '罔市', '金枝', '秀琴', '月娥', '阿滿'],
+  4: ['家豪', '冠宇', '宗翰', '承恩', '柏翰', '俊傑', '浩宇', '子豪'],
+};
 const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const pick = (arr) => arr[rnd(0, arr.length - 1)];
 const fmt = (n) => n.toLocaleString('en-US');
@@ -10,7 +16,9 @@ const fmt = (n) => n.toLocaleString('en-US');
 const NEWS = {
   wrongPin: { head: 'ATM 形同虛設！錯誤密碼竟能領錢', body: '本報訊：昨日某銀行 ATM 未檢測出錯誤密碼，盜領者輕鬆提走現金。銀行坦承「機台內部人員疏失」，受害者欲哭無淚。' },
   noLock: { head: '車手猖獗！ATM 未起到保護作用', body: '本報訊：詐團車手持人頭卡連續試密碼，ATM 竟未鎖卡，任其得手。警方痛批金融防線失守，呼籲銀行全面檢討。' },
+  bigLoss: { head: 'ATM 狂吐鈔！銀行單筆損失破五千', body: '本報訊：某銀行 ATM 疑似「出鈔異常」，民眾領錢竟拿到大把鈔票，目擊者笑稱「比中發票還爽」。銀行高層震怒，揚言徹查機台內部作業。' },
 };
+const BIG_LOSS = 5000; // 單筆損失達此金額即上新聞
 
 let S; // game state
 
@@ -34,8 +42,9 @@ function makeCustomer() {
   if (Math.random() < 0.3) amount = rnd(0, 19) * 1000 + rnd(1, 9) * 100; // 事件 C
   else amount = rnd(1, 20) * 1000;
   const balance = Math.random() < 0.15 ? Math.max(0, amount - rnd(1, 50) * 100) : amount + rnd(0, 300) * 100;
+  const sprite = rnd(1, 4);
   return {
-    id: ++S.uid, name: pick(SURNAMES) + pick(GIVEN), sprite: rnd(1, 4),
+    id: ++S.uid, name: pick(SURNAMES) + pick(GIVEN[sprite]), sprite,
     card: String(rnd(100000, 999999)), pin, seq, try: 0, balance, amount,
     flipped: Math.random() < 0.25, phase: 'walk', auth: null, fraud: false,
   };
@@ -174,13 +183,14 @@ function actDispense() {
   const c = S.cur; const given = trayTotal();
   if (!c || c.phase !== 'amtShown') return toast('目前沒有可出鈔的交易');
   SFX.cash();
-  const req = c.amount;
+  const req = c.amount, lossBefore = S.loss;
   if (c.auth !== given) addLoss(Math.abs((c.auth || 0) - given)); // 帳目不平
   if (c.fraud) { addLoss(given); say('謝啦～', 'smirk'); leave('smirk', 'run'); }
   else if (req > c.balance) { addLoss(given); say('（透支也能領？）', 'smirk'); leave('smirk', 'run'); }
   else if (given > req) { addLoss(given - req); say('（賺到了！快跑）', 'smirk'); leave('smirk', 'run'); }
   else if (given < req) { addLoss(req - given); addComp(); rage('錢不對啦！！'); leave('angry'); }
   else { S.done++; renderHud(); say('', 'neutral'); leave('neutral'); }
+  if (S.loss - lossBefore >= BIG_LOSS) addNews('bigLoss');
   clearTray();
 }
 
@@ -289,11 +299,23 @@ function startGame() {
 function endGame() {
   S.running = false; clearInterval(S.tickId);
   let rank, title;
-  if (S.comp === 0 && S.loss === 0 && S.done >= 15) [rank, title] = ['S', '零失誤機器人'];
+  const fireReasons = [];
+  if (S.loss >= 10000) fireReasons.push(`營業損失高達 NTD ${fmt(S.loss)}`);
+  if (S.comp >= 6) fireReasons.push(`客訴累積 ${S.comp} 次`);
+  if (S.done < 5) fireReasons.push(`整班只完成 ${S.done} 位顧客`);
+  const fired = fireReasons.length > 0;
+  if (fired) [rank, title] = ['💀', '解雇！明天不用來了'];
+  else if (S.comp === 0 && S.loss === 0 && S.done >= 15) [rank, title] = ['S', '零失誤機器人'];
   else if (S.comp <= 2 && S.loss <= 2000) [rank, title] = ['A', '優秀櫃員'];
   else if (S.comp <= 5) [rank, title] = ['B', '血汗勞工'];
   else [rank, title] = ['C', '賠錢貨，準備開除'];
   $('rank').textContent = rank; $('rankTitle').textContent = title;
+  $('fired').classList.toggle('hidden', !fired);
+  if (fired) $('fired').innerHTML = `<div class="fh">解 僱 通 知 書</div>
+    <div>ATM 機台內部作業員 台端：</div>
+    <ul>${fireReasons.map((r) => `<li>${r}</li>`).join('')}</ul>
+    <div>經本行審議，自即日起終止僱傭關係。請於今日內交還機房鑰匙並清空置物櫃。</div>
+    <div class="fs">ATM人銀行 人資部 <span class="stamp">解僱</span></div>`;
   $('stats').innerHTML = `<tr><td>✅ 完成客戶數</td><td>${S.done} 人</td></tr>
     <tr><td>💸 營業損失總額</td><td>NTD ${fmt(S.loss)}</td></tr>
     <tr><td>😡 客訴總次數</td><td>${S.comp} 次</td></tr>
