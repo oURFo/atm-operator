@@ -124,3 +124,21 @@ button:active { transform: scale(.95); filter: brightness(1.2); }
 #fired .fs { text-align: right; margin-top: 8px; }
 #fired .stamp { display: inline-block; border: 3px solid #d32f2f; color: #d32f2f; font-weight: 900; padding: 2px 6px; border-radius: 50%; transform: rotate(-15deg); margin-left: 6px; }
 
+
+/* Title screen */
+.overlay.title { flex-direction: column; justify-content: space-between; padding: 0; background: #f3e9d8 url(../assets/title.jpg) center / cover no-repeat; }
+.title-top { width: 100%; text-align: center; padding: 28px 16px 40px; background: linear-gradient(#f3e9d8f0, #f3e9d800); }
+.title-top h1 { font-size: 64px; font-weight: 900; color: #e6a100; -webkit-text-stroke: 2px #3a2a00; text-shadow: 0 4px 0 #3a2a00; letter-spacing: 4px; }
+.title-top .sub { color: #5a4a2a; font-weight: bold; margin-top: 2px; letter-spacing: 3px; }
+.title-bottom { width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 50px 24px 28px; background: linear-gradient(#0000, #000c 45%); }
+.title-bottom .big { flex: none; padding: 14px; font-size: 20px; }
+.title-bottom .warn { text-align: center; }
+/* Tutorial guide */
+#guide { position: absolute; top: 4px; left: 6px; right: 6px; z-index: 55; background: #fffbe6; color: #222; border: 3px solid #ffb300; border-radius: 12px; padding: 8px 10px; box-shadow: 0 6px 20px #000c; font-size: 14px; line-height: 1.5; }
+#guideStep { font-size: 11px; color: #a07000; font-weight: bold; }
+#guideText b { color: #c62828; }
+.guide-btns { display: flex; gap: 8px; margin-top: 6px; height: 34px; }
+.guide-btns .mid { font-size: 13px; }
+.tut-hl { position: relative; z-index: 20; outline: 3px solid #ffeb3b !important; outline-offset: 2px; animation: tutpulse 1s infinite; }
+@keyframes tutpulse { 50% { outline-color: #ff5722; box-shadow: 0 0 18px #ffeb3b; } }
+

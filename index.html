@@ -78,18 +78,25 @@
   <div id="toast" class="hidden"></div>
 
   <!-- 開始畫面 -->
-  <div id="startScreen" class="overlay">
-    <div class="box">
-      <h1>🏧 ATM人</h1>
+  <div id="startScreen" class="overlay title">
+    <div class="title-top">
+      <h1>ATM人</h1>
       <p class="sub">ATM Operator</p>
-      <ol class="howto">
-        <li>【機房】看卡片：反面就<b>上滑推回</b>，正面記下卡號</li>
-        <li>【終端機】輸入卡號 → 查詢，取得密碼與餘額</li>
-        <li>看監視器的密碼：對按 <b>V</b>、錯按 <b>X</b>；錯 3 次要<b>鎖卡</b></li>
-        <li>看提款金額：餘額不足就推回卡片；足夠則<b>提款授權</b>並點鈔出鈔</li>
-      </ol>
+    </div>
+    <div class="title-bottom">
+      <button id="btnStart" class="big gold">▶ 開始上班（3 分鐘）</button>
+      <button id="btnTutorial" class="big gray">📘 新手教學</button>
       <p class="warn">⚠ 系統沒有防呆，所有錯誤照單全收！</p>
-      <button id="btnStart" class="big gold">開始上班（3 分鐘）</button>
+    </div>
+  </div>
+
+  <!-- 新手教學導引 -->
+  <div id="guide" class="hidden">
+    <div id="guideStep"></div>
+    <div id="guideText"></div>
+    <div class="guide-btns">
+      <button id="guideExit" class="mid gray">離開教學</button>
+      <button id="guideNext" class="mid gold hidden">下一步 ▶</button>
     </div>
   </div>
 
@@ -108,5 +115,6 @@
 </div>
 <script src="js/audio.js"></script>
 <script src="js/game.js"></script>
+<script src="js/tutorial.js"></script>
 </body>
 </html>
