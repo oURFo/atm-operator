@@ -1,6 +1,6 @@
 // ===== ATM人 主遊戲邏輯 =====
 const $ = (id) => document.getElementById(id);
-const GAME_TIME = 180, SPAWN_EVERY = 8, MAX_QUEUE = 3;
+const GAME_TIME = 180, SPAWN_EVERY = 8, MAX_QUEUE = 3, PATIENCE = 30; // MAX_QUEUE = 畫面最多顯示人數
 const SURNAMES = '陳林黃張李王吳劉蔡楊許鄭謝郭洪曾邱廖賴周'.split('');
 // 名字依圖像：1 中年上班族男、2 年輕女生、3 阿嬤、4 刺青年輕男
 const GIVEN = {
@@ -55,12 +55,17 @@ function tick() {
   S.time--;
   S.nextSpawn--;
   if (S.nextSpawn <= 0) { spawn(); S.nextSpawn = SPAWN_EVERY; }
+  // 排隊超過 PATIENCE 秒的顧客離開
+  const before = S.queue.length;
+  S.queue = S.queue.filter((c) => c.joinAt - S.time < PATIENCE);
+  const gone = before - S.queue.length;
+  if (gone) { S.lost += gone; toast(`等太久，${gone} 位顧客離開了`); renderQueue(); }
   renderHud();
   if (S.time <= 0) endGame();
 }
 function spawn() {
-  if (S.queue.length >= MAX_QUEUE) { S.lost++; toast('隊伍滿了，一位顧客走掉了'); return; }
-  S.queue.push(makeCustomer());
+  const c = makeCustomer(); c.joinAt = S.time;
+  S.queue.push(c);
   if (!S.cur) nextCustomer(); else renderQueue();
 }
 function later(c, ms, fn) { setTimeout(() => { if (S.running && S.cur === c) fn(); }, ms); }
@@ -264,7 +269,8 @@ function setupSwipe() {
 }
 
 // ---------- 畫面 ----------
-function setMirror(label, val) { $('mirrorLabel').textContent = label; $('mirrorValue').textContent = val; }
+function setMirror(label, val) { $('mirrorLabel').textContent = label; $('mirrorValue').textContent = val; showJudge(S.cur?.phase === 'pinShown'); }
+function showJudge(on) { $('judge').classList.toggle('hidden', !on); }
 function setFace(mood) { const el = $('customer'); ['smirk', 'annoyed', 'angry'].forEach((m) => el.classList.remove(m)); if (mood && mood !== 'neutral') el.classList.add(mood); }
 function say(text, mood) {
   if (mood) setFace(mood);
@@ -275,7 +281,9 @@ function say(text, mood) {
 }
 function renderQueue() {
   const q = $('queue'); q.innerHTML = '';
-  S.queue.forEach((c) => { const d = document.createElement('div'); d.className = 'q sprite'; d.style.backgroundImage = `url(assets/cust${c.sprite}.jpg)`; q.appendChild(d); });
+  S.queue.slice(0, MAX_QUEUE).forEach((c) => { const d = document.createElement('div'); d.className = 'q sprite'; d.style.backgroundImage = `url(assets/cust${c.sprite}.jpg)`; q.appendChild(d); });
+  const more = S.queue.length - MAX_QUEUE;
+  if (more > 0) { const m = document.createElement('div'); m.className = 'qmore'; m.textContent = '+' + Math.min(more, 99); q.appendChild(m); }
 }
 function renderHud() {
   const t = Math.max(0, S.time);
@@ -344,8 +352,8 @@ function init() {
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === t.dataset.tab));
   });
   document.querySelectorAll('.bill').forEach((b) => b.onclick = () => S.running && addBill(+b.dataset.v, b));
-  $('btnV').onclick = () => S.running && actV();
-  $('btnX').onclick = () => S.running && actX();
+  $('btnV').onclick = () => { if (S.running && S.cur?.phase === 'pinShown') { showJudge(false); actV(); } };
+  $('btnX').onclick = () => { if (S.running && S.cur?.phase === 'pinShown') { showJudge(false); actX(); } };
   $('btnReset').onclick = () => { SFX.beep(); clearTray(); };
   $('btnDispense').onclick = () => S.running && actDispense();
   $('btnQuery').onclick = () => S.running && actQuery();
