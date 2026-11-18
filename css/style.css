@@ -144,3 +144,79 @@ button:active { transform: scale(.95); filter: brightness(1.2); }
 .tut-hl { position: relative; z-index: 20; outline: 3px solid #ffeb3b !important; outline-offset: 2px; animation: tutpulse 1s infinite; }
 @keyframes tutpulse { 50% { outline-color: #ff5722; box-shadow: 0 0 18px #ffeb3b; } }
 
+
+/* ================= 機械化介面升級 (覆寫) ================= */
+:root { --steel1: #9aa3ad; --steel2: #5d6670; --steel3: #3a4148; --plate: #2e3339; }
+.steel { background: linear-gradient(180deg, #6f7882, #4a525a); }
+#work { background:
+  radial-gradient(circle at 10px 10px, #c8ced4 0 3px, #555 3.5px, transparent 4.5px) 0 0 / 100% 100% no-repeat,
+  repeating-linear-gradient(90deg, #ffffff06 0 1px, transparent 1px 3px),
+  linear-gradient(180deg, #3d444b, #2a2f35); border-top: 3px solid #111; }
+/* 鉚釘 */
+.panel, #tabs { position: relative; }
+.panel::before { content: ""; position: absolute; inset: 4px; pointer-events: none; border-radius: 6px;
+  background:
+    radial-gradient(circle, #d0d6dc 0 2px, #444 2.5px, transparent 3.5px) left top / 14px 14px no-repeat,
+    radial-gradient(circle, #d0d6dc 0 2px, #444 2.5px, transparent 3.5px) right top / 14px 14px no-repeat,
+    radial-gradient(circle, #d0d6dc 0 2px, #444 2.5px, transparent 3.5px) left bottom / 14px 14px no-repeat,
+    radial-gradient(circle, #d0d6dc 0 2px, #444 2.5px, transparent 3.5px) right bottom / 14px 14px no-repeat; }
+#room, #term { background: repeating-linear-gradient(90deg, #ffffff05 0 1px, transparent 1px 2px), linear-gradient(#353b42, #2b3036); padding: 14px; }
+
+/* 分頁 = 機械切換開關 */
+#tabs { gap: 6px; padding: 6px; background: linear-gradient(#22262b, #1a1d21); height: 58px; border-bottom: 2px solid #000; }
+.tab { border-radius: 6px; font-size: 15px; letter-spacing: 1px; color: #9aa; border: none;
+  background: linear-gradient(180deg, #5b636c, #3a4047); box-shadow: inset 0 1px 0 #ffffff40, inset 0 -3px 0 #0006, 0 3px 0 #000; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.tab::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #300; box-shadow: inset 0 1px 2px #000; }
+.tab.active { color: #fff; transform: translateY(2px); box-shadow: inset 0 2px 6px #000a, 0 1px 0 #000; background: linear-gradient(180deg, #3a4047, #4a525a); border: none; }
+.tab.active::before { background: #3f3; box-shadow: 0 0 8px #3f3, inset 0 -1px 2px #060; }
+
+/* 通用機械按鈕 */
+.mid, .fk, .big, #judge button, .guide-btns .mid {
+  border-radius: 6px; letter-spacing: 1px; text-shadow: 0 -1px 0 #0008;
+  box-shadow: inset 0 1px 0 #ffffff55, inset 0 -4px 0 #0005, 0 4px 0 #111, 0 5px 6px #0008;
+  border: 1px solid #0008; transition: transform .05s, box-shadow .05s; }
+.mid:active, .fk:active, .big:active, #judge button:active, #numpad button:active {
+  transform: translateY(4px); box-shadow: inset 0 2px 4px #0008, 0 0 0 #111; filter: brightness(.95); }
+.green { background: linear-gradient(180deg, #43a047, #1b5e20); }
+.red { background: linear-gradient(180deg, #e53935, #8e0000); }
+.gold { background: linear-gradient(180deg, #ffca28, #c68400); color: #2a1d00; text-shadow: 0 1px 0 #fff6; }
+.gray { background: linear-gradient(180deg, #78848f, #3f4850); }
+
+/* 讀卡機 */
+#cardZone { height: 40%; }
+#cardSlot { background: radial-gradient(ellipse at 50% 0, #1d2126, #0b0c0e 70%); border: 4px solid; border-color: #6a737c #2a2f34 #2a2f34 #6a737c; border-radius: 8px; box-shadow: inset 0 0 20px #000; }
+#cardSlot::before { top: 8px; left: 10%; right: 10%; height: 10px; background: linear-gradient(#000, #222); border: 2px solid #555; border-radius: 2px; box-shadow: 0 0 6px #0f04 inset; }
+#cardSlot::after { content: "CARD READER ▸ MOD-01"; position: absolute; bottom: 3px; left: 8px; font: bold 9px monospace; color: #7c8; letter-spacing: 1px; }
+#noCard { font: 12px monospace; color: #3a5; }
+
+/* 鈔箱 */
+#stacks { background: #1c1f23; border: 3px solid; border-color: #22262a #5e666e #5e666e #22262a; border-radius: 6px; padding: 6px; }
+#stacks::before { content: "CASSETTE"; font: bold 9px monospace; color: #fc3; letter-spacing: 2px; text-align: center;
+  background: repeating-linear-gradient(45deg, #fc3 0 6px, #111 6px 12px); color: transparent; height: 6px; border-radius: 2px; }
+.bill { border-radius: 2px; border: 2px solid #111; outline: 2px solid #555; }
+#trayWrap::before { content: "DISPENSER OUTPUT"; font: bold 9px monospace; color: #9ab; letter-spacing: 2px; text-align: center; }
+#tray { background: repeating-linear-gradient(0deg, #0a0b0c 0 6px, #16181b 6px 8px); border: 4px solid; border-color: #22262a #66707a #66707a #22262a; border-radius: 4px; }
+#trayTotal { font-family: "Courier New", monospace; color: #ff3b3b; text-shadow: 0 0 8px #f00; background: #120000; border: 1px solid #400; }
+
+/* 終端機外框 */
+#crt { border-radius: 14px; box-shadow: inset 0 0 40px #000a, 0 0 0 8px #262a2e, 0 0 0 10px #555, 0 6px 0 10px #111; margin: 6px; }
+#termKeys { margin-top: 4px; }
+#numpad { background: linear-gradient(#24282c, #1a1d20); padding: 8px; border-radius: 8px; border: 2px solid #000; box-shadow: inset 0 2px 6px #000; }
+#numpad button { background: linear-gradient(180deg, #e9edf0, #a9b1b8); color: #222; border-radius: 5px; border: 1px solid #555;
+  box-shadow: inset 0 1px 0 #fff, inset 0 -3px 0 #0003, 0 3px 0 #333; font: 900 22px "Courier New", monospace; }
+#numpad button.clr { background: linear-gradient(180deg, #ffd54f, #e09a00); }
+#funcKeys::before { content: "FUNC"; font: bold 9px monospace; color: #9ab; letter-spacing: 3px; text-align: center; }
+.fk { background: linear-gradient(180deg, #1e88e5, #0d47a1); font-size: 15px; }
+.fk.danger { background: linear-gradient(180deg, #e53935, #8e0000); outline: 3px solid; outline-offset: -1px;
+  outline-color: #fc3; border-image: repeating-linear-gradient(45deg, #fc3 0 6px, #111 6px 12px) 4; border-width: 4px; border-style: solid; }
+
+/* 監視器 / HUD */
+#hud { background: #050805e0; border: 1px solid #2a3; font-family: "Courier New", monospace; color: #6f6; }
+#hud b { color: #ff4040; text-shadow: 0 0 6px #f00; }
+#mirror { border: 4px solid; border-color: #9aa3ad #4a525a #4a525a #9aa3ad; border-radius: 4px; background: linear-gradient(#08307a, #041a45); }
+#mirrorValue { font-family: "Courier New", monospace; }
+#judge button { height: 40px; font-size: 26px; }
+
+/* 導引框 & 結算框 改為金屬銘牌 */
+#guide { background: linear-gradient(#f5f0dc, #e2dabb); border: 4px solid #6a737c; border-radius: 6px; }
+.box { background: linear-gradient(#3a4148, #23272c); border: 4px solid; border-color: #9aa3ad #4a525a #4a525a #9aa3ad; border-radius: 8px; }
