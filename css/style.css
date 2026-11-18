@@ -280,3 +280,8 @@ button:active { transform: scale(.95); filter: brightness(1.2); }
 .cd9 .cardno { bottom: 33% !important; left: 50% !important; transform: translateX(-50%); color: #222 !important; text-shadow: none !important; letter-spacing: 5px !important; }
 .cd9 .ctag { top: 8%; bottom: auto !important; color: #e60012; }
 .cd9 .chip { left: auto !important; right: 8%; top: 30% !important; }
+
+/* 卡片依插卡槽大小縮放，避免上半部被裁切 */
+#cardSlot { container-type: size; }
+#card { width: min(90cqw, calc((100cqh - 30px) * 1.586)) !important; bottom: 14px !important; }
+
