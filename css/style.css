@@ -220,3 +220,63 @@ button:active { transform: scale(.95); filter: brightness(1.2); }
 /* 導引框 & 結算框 改為金屬銘牌 */
 #guide { background: linear-gradient(#f5f0dc, #e2dabb); border: 4px solid #6a737c; border-radius: 6px; }
 .box { background: linear-gradient(#3a4148, #23272c); border: 4px solid; border-color: #9aa3ad #4a525a #4a525a #9aa3ad; border-radius: 8px; }
+
+/* ================= 10 種卡面 ================= */
+#card.front { padding: 0; overflow: hidden; border: 1px solid #fff4; }
+#card.front > div { position: absolute; }
+#card.front .bankname { top: 7%; left: 5%; font-size: 11px; font-weight: 900; white-space: nowrap; z-index: 2; }
+#card.front .chip { top: 34%; left: 7%; width: 34px; height: 26px; margin: 0; z-index: 2;
+  background: linear-gradient(90deg, transparent 45%, #8a6a00 45% 55%, transparent 55%), linear-gradient(0deg, transparent 45%, #8a6a00 45% 55%, transparent 55%), linear-gradient(135deg, #fff2a8, #d4a017 60%, #9c7400); border: 1px solid #6b5200; }
+#card.front .cardno { bottom: 22%; left: 6%; font: 900 18px "Courier New", monospace; letter-spacing: 3px; color: #fff; text-shadow: 0 1px 0 #000, 0 -1px 0 #fff5; z-index: 2; white-space: nowrap; }
+#card.front .ctag { bottom: 7%; right: 6%; font: italic 900 11px sans-serif; z-index: 2; opacity: .9; }
+#card.front .deco { inset: 0; z-index: 1; pointer-events: none; }
+
+/* 0 土豆銀行：經典藍，卡號左下 */
+.cd0 { background: linear-gradient(135deg, #1e88e5, #0d47a1) !important; color: #fff; }
+.cd0 .deco { background: radial-gradient(circle at 110% 120%, #fff3 0 40%, transparent 41%); }
+/* 1 珍奶：奶茶色+珍珠，卡號右上 */
+.cd1 { background: linear-gradient(160deg, #e8c9a0, #b07a4a) !important; color: #3b2412; }
+.cd1 .deco { background: radial-gradient(circle, #2b1a0e 0 5px, transparent 6px) 0 70% / 22px 22px; mask: linear-gradient(transparent 60%, #000 75%); -webkit-mask: linear-gradient(transparent 60%, #000 75%); }
+.cd1 .cardno { top: 8% !important; bottom: auto !important; right: 6%; left: auto !important; color: #3b2412 !important; text-shadow: 0 1px 0 #fff8 !important; }
+.cd1 .bankname { top: auto !important; bottom: 7%; }
+.cd1 .ctag { bottom: auto !important; top: 34%; right: 8%; }
+/* 2 夜市：霓虹紫粉，卡號置中大字 */
+.cd2 { background: radial-gradient(circle at 30% 20%, #ff3cac, #784ba0 50%, #2b1055) !important; color: #fff; }
+.cd2 .cardno { top: 45%; left: 50% !important; bottom: auto !important; transform: translate(-50%, -50%); font-size: 24px !important; color: #fff !important; text-shadow: 0 0 6px #ff3cac, 0 0 12px #0ff !important; }
+.cd2 .chip { top: 8% !important; left: auto !important; right: 7%; }
+.cd2 .ctag { left: 6%; right: auto !important; color: #0ff; }
+/* 3 鹹酥雞：橘色，卡號直排在右側 */
+.cd3 { background: repeating-linear-gradient(-45deg, #ff9800 0 14px, #fb8c00 14px 28px) !important; color: #4a1c00; }
+.cd3 .cardno { writing-mode: vertical-rl; top: 8%; right: 6%; left: auto !important; bottom: auto !important; font-size: 15px !important; letter-spacing: 1px !important; color: #fff !important; text-shadow: 0 1px 2px #000 !important; }
+.cd3 .ctag { left: 6%; right: auto !important; font-size: 16px !important; color: #fff; text-shadow: 0 1px 0 #a40; }
+/* 4 檳榔農會：深綠，卡號右下小字 */
+.cd4 { background: linear-gradient(120deg, #1b5e20, #43a047 60%, #a5d6a7) !important; color: #fff; }
+.cd4 .deco { background: radial-gradient(ellipse at 85% 30%, #c62828 0 8%, transparent 9%), radial-gradient(ellipse at 75% 40%, #c62828 0 6%, transparent 7%); }
+.cd4 .cardno { right: 5%; left: auto !important; bottom: 7% !important; font-size: 13px !important; letter-spacing: 1px !important; }
+.cd4 .ctag { top: 7%; right: 5%; bottom: auto !important; }
+/* 5 福德正神：紅金，卡號左上 */
+.cd5 { background: radial-gradient(circle at 80% 70%, #ffd54f 0 18%, transparent 19%), linear-gradient(135deg, #c62828, #7f0000) !important; color: #ffd54f; border: 3px double #ffd54f !important; }
+.cd5 .bankname { top: auto !important; bottom: 8%; left: 6%; }
+.cd5 .cardno { top: 8% !important; bottom: auto !important; color: #ffd54f !important; text-shadow: 0 1px 0 #600 !important; }
+.cd5 .chip { top: 38% !important; }
+.cd5 .ctag { bottom: 28% !important; right: 9%; font-size: 14px !important; color: #7f0000; font-style: normal !important; }
+/* 6 竹科新貴：碳纖黑，卡號左上，晶片在下 */
+.cd6 { background: repeating-linear-gradient(45deg, #1a1a1a 0 3px, #262626 3px 6px) !important; color: #ddd; }
+.cd6 .cardno { top: 28% !important; bottom: auto !important; color: #e0e0e0 !important; background: linear-gradient(#fff, #999); -webkit-background-clip: text; background-clip: text; color: transparent !important; text-shadow: none !important; }
+.cd6 .chip { top: auto !important; bottom: 10%; }
+.cd6 .ctag { color: #cfd8dc; letter-spacing: 3px; }
+/* 7 阿嬤郵局：白綠，卡號中右 */
+.cd7 { background: linear-gradient(180deg, #fff 0 62%, #2e7d32 62%) !important; color: #2e7d32; }
+.cd7 .cardno { top: 38%; right: 6%; left: auto !important; bottom: auto !important; color: #1b5e20 !important; text-shadow: none !important; }
+.cd7 .ctag { color: #fff; }
+.cd7 .chip { top: 30% !important; }
+/* 8 電競：彩虹漸層，卡號斜放 */
+.cd8 { background: linear-gradient(115deg, #ff0080, #ff8c00, #40e0d0, #7b2ff7) !important; color: #fff; }
+.cd8 .cardno { bottom: 30% !important; left: 12% !important; transform: rotate(-8deg); font-size: 20px !important; }
+.cd8 .chip { left: auto !important; right: 8%; top: 10% !important; }
+.cd8 .ctag { font-size: 14px !important; text-shadow: 2px 2px 0 #000; }
+/* 9 小七點數：白底三色條，卡號下方置中 */
+.cd9 { background: linear-gradient(180deg, #fff 0 70%, #ff7a00 70% 78%, #e60012 78% 86%, #00843d 86%) !important; color: #00843d; }
+.cd9 .cardno { bottom: 33% !important; left: 50% !important; transform: translateX(-50%); color: #222 !important; text-shadow: none !important; letter-spacing: 5px !important; }
+.cd9 .ctag { top: 8%; bottom: auto !important; color: #e60012; }
+.cd9 .chip { left: auto !important; right: 8%; top: 30% !important; }

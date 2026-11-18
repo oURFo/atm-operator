@@ -46,7 +46,7 @@ function makeCustomer() {
   return {
     id: ++S.uid, name: pick(SURNAMES) + pick(GIVEN[sprite]), sprite,
     card: String(rnd(100000, 999999)), pin, seq, try: 0, balance, amount,
-    flipped: Math.random() < 0.25, phase: 'walk', auth: null, fraud: false,
+    flipped: Math.random() < 0.25, phase: 'walk', auth: null, fraud: false, design: rnd(0, 9),
   };
 }
 
@@ -246,13 +246,26 @@ function renderTray() {
 }
 
 // ---------- 卡片 ----------
+// 10 種卡面：銀行名、晶片位置、卡號位置各不同（位置樣式寫在 CSS .cdN）
+const CARD_DESIGNS = [
+  { bank: '🏦 台灣土豆銀行', tag: 'DEBIT' },
+  { bank: '🧋 珍奶商業銀行', tag: 'BOBA CARD' },
+  { bank: '🌃 夜市金控', tag: 'NIGHT MARKET' },
+  { bank: '🍗 鹹酥雞信用合作社', tag: 'CRISPY' },
+  { bank: '🌿 檳榔農會', tag: 'FARMER' },
+  { bank: '🏮 福德正神銀行', tag: '財源廣進' },
+  { bank: '💻 竹科新貴銀行', tag: 'PLATINUM' },
+  { bank: '📮 阿嬤郵局', tag: '存簿金融卡' },
+  { bank: '🎮 電競玩家銀行', tag: 'GG CARD' },
+  { bank: '🏪 小七點數銀行', tag: 'OPEN!' },
+];
 function showCard(c) {
-  const el = $('card');
-  el.className = 'in ' + (c.flipped ? 'back' : 'front');
+  const el = $('card'), d = c.design ?? 0;
+  el.className = 'in ' + (c.flipped ? 'back' : `front cd${d}`);
   el.style.transform = '';
   el.innerHTML = c.flipped
     ? '<div class="stripe"></div><div class="sig"></div><div class="backtxt">本卡為本行財產</div>'
-    : `<div class="bankname">🏦 ATM人銀行 DEBIT</div><div class="chip"></div><div class="cardno">${c.card.replace(/(\d{3})(\d{3})/, '$1 $2')}</div>`;
+    : `<div class="bankname">${CARD_DESIGNS[d].bank}</div><div class="chip"></div><div class="cardno">${c.card.replace(/(\d{3})(\d{3})/, '$1 $2')}</div><div class="ctag">${CARD_DESIGNS[d].tag}</div><div class="deco"></div>`;
   $('swipeHint').classList.remove('hidden'); $('noCard').classList.add('hidden');
 }
 function hideCard() { $('card').className = 'hidden'; $('swipeHint').classList.add('hidden'); $('noCard').classList.remove('hidden'); }
